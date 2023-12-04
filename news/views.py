@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 
 from .models import Category, Article
 
@@ -9,4 +9,15 @@ def index(request):
         "categories": categories,
         "articles": articles
     }
-    return render(request, "base.html", context)
+    return render(request, "index.html", context)
+
+
+def article_details_view(request, pk):
+
+    article = get_object_or_404(Article, pk=pk)
+
+    context = {
+        "article": article
+    }
+
+    return render(request=request, template_name="details.html", context=context)
