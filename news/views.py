@@ -14,7 +14,7 @@ def index(request):
 
 def article_details_view(request, pk):
 
-    article = get_object_or_404(Article, pk=pk)
+    article = get_object_or_404(Article, pk=pk)        
 
     context = {
         "article": article
