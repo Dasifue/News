@@ -24,3 +24,17 @@ class UserRegistrationForm(forms.ModelForm):
 
         return super().clean()
         
+
+class ChangePasswordForm(forms.Form):
+    real_password = forms.CharField(max_length=50)
+    new_password = forms.CharField(max_length=50, validators=[validate_password])
+    new_password_confirm = forms.CharField(max_length=50, validators=[validate_password])
+
+    def clean(self):
+        password = self.cleaned_data["new_password"]
+        password_confirm = self.cleaned_data["new_password_confirm"]
+
+        if password != password_confirm:
+            raise ValidationError(message={"new_password":"Пароли не совпали!"}) 
+
+        return super().clean()
