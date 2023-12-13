@@ -12,11 +12,21 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
+class Tag(models.Model):
+    name = models.CharField(verbose_name="Название", max_length=50)
+
+    class Meta:
+        verbose_name = "Тег"
+        verbose_name_plural = "Теги"
+
+    def __str__(self):
+        return self.name    
 
 
 class Article(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="articles", verbose_name="Владелец")
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, related_name="articles", null=True, blank=False, verbose_name="Категория")
+    tags = models.ManyToManyField(Tag, related_name="articles", verbose_name="Теги")
     name = models.CharField(verbose_name="Заголовок", max_length=100)
     content = models.TextField(verbose_name="Контент")
     image = models.ImageField(verbose_name="Изображение", upload_to="articles/", null=True, blank=True)

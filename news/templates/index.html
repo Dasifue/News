@@ -6,7 +6,7 @@
       <div class="container-fluid">
         <div class="owl-banner owl-carousel">
           <div class="item">
-            <img src="assets/images/banner-item-01.jpg" alt="">
+            <img src="{% static 'assets/images/banner-item-01.jpg' %}" alt="">
             <div class="item-content">
               <div class="main-content">
                 <div class="meta-category">
@@ -142,6 +142,12 @@
                                 <li><i class="fa fa-heart"></i></li>
                                 <li>727</li>
                               </a>
+                            </ul>
+                            <ul class="post-tags">
+                              <li><i class="fa fa-tags"></i></li>
+                              {% for tag in article.tags.all %}
+                              <li><a href="#">{{ tag.name }}</a></li>
+                              {% endfor %}
                             </ul>
                           </div>
                           <div class="col-6">

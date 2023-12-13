@@ -7,6 +7,7 @@ class User(AbstractUser):
     email = models.EmailField(verbose_name="Почта", unique=True)
     biography = models.TextField(verbose_name="Биография", null=True, blank=True)
     job = models.CharField(verbose_name="Профессия", max_length=50, null=True, blank=True)
+    favorites = models.ManyToManyField("news.Article", related_name="users", verbose_name="Фавориты")
 
     class Meta:
         verbose_name = "Пользователь"

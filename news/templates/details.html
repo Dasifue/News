@@ -56,6 +56,12 @@
                                       <li>727</li>
                                     </a>
                                   </ul>
+                                  <ul class="post-tags">
+                                    <li><i class="fa fa-tags"></i></li>
+                                    {% for tag in article.tags.all %}
+                                    <li><a href="#">{{ tag.name }}</a></li>
+                                    {% endfor %}
+                                  </ul>
                                 </div>
                                 <div class="col-6">
                                   <ul class="post-share">
