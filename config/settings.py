@@ -79,13 +79,15 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'news',
-        'USER': 'news_admin',
-        'PASSWORD': 'Hello123',
+        'NAME': 'test',
+        'USER': 'test_admin',
+        'PASSWORD': 'password',
         'HOST': 'localhost',
         'PORT': '3306',
     }
 }
+
+print("HELLO, WORLD!")
 
 
 # Password validation
