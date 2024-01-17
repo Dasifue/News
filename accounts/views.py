@@ -1,9 +1,11 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
 from .models import User
 from .forms import UserRegistrationForm, ChangePasswordForm
+
+from news.models import Article
 
 
 def register_view(request): 
@@ -76,3 +78,30 @@ def change_password_view(request):
     
     context.update({"form": form}) # обновление контекста
     return render(request=request, template_name="change_password.html", context=context) # отправка context данных на html страницу
+
+
+@login_required
+def add_to_favorites_view(request, article_pk: int):
+    article = get_object_or_404(Article, id=article_pk)
+    user: User = request.user
+    user.favorites.add(article)
+    return redirect(request.META.get("HTTP_REFERER", "/"))
+
+
+@login_required
+def remove_from_favorites_view(request, article_pk: int):
+    article = get_object_or_404(Article, id=article_pk)
+    user: User = request.user
+    user.favorites.remove(article)
+    return redirect(request.META.get("HTTP_REFERER", "/"))
+
+
+@login_required
+def favorites_view(request):
+    user: User = request.user
+    articles = user.favorites.all()
+
+    context = {
+        "articles": articles 
+    }
+    return render(request=request, template_name="favorites.html", context=context)

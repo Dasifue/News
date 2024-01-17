@@ -22,7 +22,7 @@
             </div>
           </div>
           <div class="item">
-            <img src="assets/images/banner-item-02.jpg" alt="">
+            <img src="{% static 'assets/images/banner-item-02.jpg' %}" alt="">
             <div class="item-content">
               <div class="main-content">
                 <div class="meta-category">
@@ -38,7 +38,7 @@
             </div>
           </div>
           <div class="item">
-            <img src="assets/images/banner-item-03.jpg" alt="">
+            <img src="{% static 'assets/images/banner-item-03.jpg' %}" alt="">
             <div class="item-content">
               <div class="main-content">
                 <div class="meta-category">
@@ -54,7 +54,7 @@
             </div>
           </div>
           <div class="item">
-            <img src="assets/images/banner-item-04.jpg" alt="">
+            <img src="{% static 'assets/images/banner-item-04.jpg' %}" alt="">
             <div class="item-content">
               <div class="main-content">
                 <div class="meta-category">
@@ -70,7 +70,7 @@
             </div>
           </div>
           <div class="item">
-            <img src="assets/images/banner-item-05.jpg" alt="">
+            <img src="{% static 'assets/images/banner-item-05.jpg' %}" alt="">
             <div class="item-content">
               <div class="main-content">
                 <div class="meta-category">
@@ -86,7 +86,7 @@
             </div>
           </div>
           <div class="item">
-            <img src="assets/images/banner-item-06.jpg" alt="">
+            <img src="{% static 'assets/images/banner-item-06.jpg' %}" alt="">
             <div class="item-content">
               <div class="main-content">
                 <div class="meta-category">
@@ -133,15 +133,21 @@
                         <li><a href="#">{{ article.updated }}</a></li>
                         <li><a href="#">12 Comments</a></li>
                       </ul>
-                      <p>{{ article.content }}</p>
                       <div class="post-options">
                         <div class="row">
                           <div class="col-6">
                             <ul class="post-tags">
-                              <a href="#">
-                                <li><i class="fa fa-heart"></i></li>
-                                <li>727</li>
+                              {% if request.user not in article.users.all %}
+                              <a href="{% url 'accounts:add_to_favorites' article_pk=article.id %}">
+                                <li><i class="fa fa-heart-o"></i></li>
+                                <li>{{ article.users.count }}</li>
                               </a>
+                              {% else %}
+                              <a href="{% url 'accounts:remove_from_favorites' article_pk=article.id %}">
+                                <li><i class="fa fa-heart"></i></li>
+                                <li>{{ article.users.count }}</li>
+                              </a>
+                              {% endif %}
                             </ul>
                             <ul class="post-tags">
                               <li><i class="fa fa-tags"></i></li>

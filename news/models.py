@@ -26,7 +26,7 @@ class Tag(models.Model):
 class Article(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="articles", verbose_name="Владелец")
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, related_name="articles", null=True, blank=False, verbose_name="Категория")
-    tags = models.ManyToManyField(Tag, related_name="articles", verbose_name="Теги")
+    tags = models.ManyToManyField(Tag, related_name="articles", verbose_name="Теги", blank=True)
     name = models.CharField(verbose_name="Заголовок", max_length=100)
     content = models.TextField(verbose_name="Контент")
     image = models.ImageField(verbose_name="Изображение", upload_to="articles/", null=True, blank=True)

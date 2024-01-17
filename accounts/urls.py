@@ -9,5 +9,9 @@ urlpatterns = [
     path("login/", view=views.login_view, name="login"),
     path("logout/", view=views.logout_view, name="logout"),
 
-    path("password/change/", view=views.change_password_view, name="change_password")
+    path("password/change/", view=views.change_password_view, name="change_password"),
+
+    path("favorites/", view=views.favorites_view, name="favorites"),
+    path("favorites/add/<int:article_pk>", view=views.add_to_favorites_view, name="add_to_favorites"),
+    path("favorites/remove/<int:article_pk>", view=views.remove_from_favorites_view, name="remove_from_favorites"),
 ]

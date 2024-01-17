@@ -51,10 +51,17 @@
                               <div class="row">
                                 <div class="col-6">
                                   <ul class="post-tags">
-                                    <a href="#">
-                                      <li><i class="fa fa-heart"></i></li>
-                                      <li>727</li>
+                                    {% if request.user not in article.users.all %}
+                                    <a href="{% url 'accounts:add_to_favorites' article_pk=article.id %}">
+                                      <li><i class="fa fa-heart-o"></i></li>
+                                      <li>{{ article.users.count }}</li>
                                     </a>
+                                    {% else %}
+                                    <a href="{% url 'accounts:remove_from_favorites' article_pk=article.id %}">
+                                      <li><i class="fa fa-heart"></i></li>
+                                      <li>{{ article.users.count }}</li>
+                                    </a>
+                                    {% endif %}
                                   </ul>
                                   <ul class="post-tags">
                                     <li><i class="fa fa-tags"></i></li>
