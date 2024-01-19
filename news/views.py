@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 
-from .models import Category, Article
+from accounts.models import User
+from .models import Category, Article, Comment
 from .forms import ArticleForm
 from .utils import find_tags
 
@@ -17,10 +18,12 @@ def index(request):
 
 def article_details_view(request, pk):
 
-    article = get_object_or_404(Article, pk=pk)        
+    article = get_object_or_404(Article, pk=pk)   
+    comments = article.comments.filter(parent=None)
 
     context = {
-        "article": article
+        "article": article,
+        "comments": comments,
     }
 
     return render(request=request, template_name="details.html", context=context)
@@ -43,3 +46,23 @@ def article_creation_view(request):
         "form": form,
     }
     return render(request=request, template_name="article.html", context=context)
+
+
+@login_required
+def create_comment_view(request, article_pk: int, parent_pk: int|None = None):
+    user: User = request.user
+    article = get_object_or_404(Article, pk=article_pk)
+    comment = request.POST.get("comment")
+
+    parent = None
+    if parent_pk is not None:
+        parent = get_object_or_404(Comment, pk=parent_pk)
+
+    Comment.objects.create(
+        owner=user,
+        article=article,
+        comment=comment,
+        parent=parent
+    )
+
+    return redirect(request.META.get("HTTP_REFERER", "/"))

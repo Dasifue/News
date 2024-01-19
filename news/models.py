@@ -40,3 +40,16 @@ class Article(models.Model):
     
     def __str__(self):
         return self.name
+    
+
+class Comment(models.Model):
+    owner = models.ForeignKey(User, on_delete=models.SET_NULL, related_name="comments", null=True, verbose_name="Владелец")
+    article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name="comments", verbose_name="Публикация")
+    comment = models.TextField(verbose_name="Комментарий")
+    created = models.DateField(verbose_name="Дата создания", auto_now_add=True)
+    updated = models.DateField(verbose_name="Дата обновления", auto_now=True)
+    parent = models.ForeignKey("self", on_delete=models.CASCADE, related_name="answers", null=True, blank=True, verbose_name="Родительский комментарий")
+
+    class Meta:
+        verbose_name = "Комментарий"
+        verbose_name_plural = "Комментарии"
