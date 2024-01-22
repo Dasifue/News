@@ -13,8 +13,15 @@ class ArticleForm(forms.ModelForm):
             **self.cleaned_data, # передача валидных данных с формы в публикацию
             owner = owner # определение владельца публикации
         )
+        
         if tags: # если были переданы теги
             article.tags.add(*tags) # добавляем теги в публикацию
 
         return article
         
+
+    def update(self, pk, *tags):
+        instance = Article.objects.filter(pk=pk).update(
+            **self.cleaned_data
+            )
+        return instance

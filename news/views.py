@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from accounts.models import User
 from .models import Category, Article, Comment
 from .forms import ArticleForm
-from .utils import find_tags
+from .utils import find_tags, is_owner
 
 def index(request):
     categories = Category.objects.all()
@@ -66,3 +66,39 @@ def create_comment_view(request, article_pk: int, parent_pk: int|None = None):
     )
 
     return redirect(request.META.get("HTTP_REFERER", "/"))
+
+
+@login_required()
+@is_owner(model=Article)
+def delete_article_view(request, pk: int):
+    Article.objects.get(pk=pk).delete()
+    return redirect("news:index")
+
+
+@login_required()
+@is_owner(model=Comment)
+def delete_comment_view(request, pk: int):
+    Comment.objects.get(pk=pk).delete()
+    return redirect(request.META.get("HTTP_REFERER", "/"))
+
+
+@login_required
+@is_owner(model=Article)
+def article_update_view(request, pk: int):
+    article = get_object_or_404(Article, pk=pk)
+    form = ArticleForm(instance=article) 
+    categories = Category.objects.all() 
+
+    if request.method == "POST": # При получении метода POST
+        form = ArticleForm(data=request.POST, files=request.FILES, instance=article) # передаём в форму данные запроса и файлы, отправленные пользователем
+        if form.is_valid():
+            tags = find_tags(request.POST.get("tags")) # определяем: какие теги ввел пользователь
+            form.update(article.id, *tags) # создание публикации
+            return redirect("news:index")
+
+    context = {
+        "article": article,
+        "categories": categories,
+        "form": form,
+    }
+    return render(request=request, template_name="article_old.html", context=context)

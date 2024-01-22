@@ -12,6 +12,7 @@ def register_view(request):
     form = UserRegistrationForm() # Определяется пустая форма для регистрации пользователя
  
     if request.method == "POST": # Если пользователь ввёл данные в html форму и отправил их на сервер
+        print(request.POST)
         form = UserRegistrationForm(data=request.POST) # передаём данные в форму
         if form.is_valid(): # форма проверяет данные
             user = User.objects.create( # создаём пользователя

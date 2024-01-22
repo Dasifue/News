@@ -74,7 +74,10 @@
                                   <ul class="post-share">
                                     <li><i class="fa fa-share-alt"></i></li>
                                     <li><a href="#">Facebook</a>,</li>
-                                    <li><a href="#"> Twitter</a></li>
+                                    <li><a href="#"> Twitter</a></li><br>
+                                    {% if article.owner == request.user %}
+                                    <a href="{% url 'news:delete_article' pk=article.id %}"><li><i class="fa fa-trash"></i></li></a>
+                                    {% endif %}
                                   </ul>
                                 </div>
                               </div>
@@ -98,6 +101,9 @@
                               <h4>{{ comment.owner.email }}<span>{{ comment.updated }}</span></h4>
                               <p>{{ comment.comment }}</p>
                               <button class="reply-btn">Ответить</button>
+                              {% if comment.owner == request.user %}
+                              <a href="{% url 'news:comment_delete' pk=comment.id %}"><li><i class="fa fa-trash"></i></li></a>
+                              {% endif %}
                               <div class="reply-form" style="display: none;">
                                 <form id="comment" action="{% url 'news:comment_answer' article_pk=article.id parent_pk=comment.id %}" method="post">
                                   {% csrf_token %}
@@ -131,26 +137,6 @@
                           {% endfor %}
 
                           {% endfor %}
-                         
-
-                          <!-- <li>
-                            <div class="author-thumb">
-                              <img src="assets/images/comment-author-03.jpg" alt="">
-                            </div>
-                            <div class="right-content">
-                              <h4>Belisimo Mama<span>May 16, 2020</span></h4>
-                              <p>Nullam nec pharetra nibh. Cras tortor nulla, faucibus id tincidunt in, ultrices eget ligula. Sed vitae suscipit ligula. Vestibulum id turpis volutpat, lobortis turpis ac, molestie nibh.</p>
-                            </div>
-                          </li>
-                          <li class="replied">
-                            <div class="author-thumb">
-                              <img src="{% static 'assets/images/comment-author-02.jpg' %}" alt="">
-                            </div>
-                            <div class="right-content">
-                              <h4>Thirteen Man<span>May 22, 2020</span></h4>
-                              <p>Mauris sit amet justo vulputate, cursus massa congue, vestibulum odio. Aenean elit nunc, gravida in erat sit amet, feugiat viverra leo.</p>
-                            </div>
-                          </li> -->
 
                         </ul>
                       </div>

@@ -160,7 +160,10 @@
                             <ul class="post-share">
                               <li><i class="fa fa-share-alt"></i></li>
                               <li><a href="#">Facebook</a>,</li>
-                              <li><a href="#"> Twitter</a></li>
+                              <li><a href="#"> Twitter</a></li><br>
+                              {% if article.owner == request.user %}
+                              <a href="{% url 'news:delete_article' pk=article.id %}"><li><i class="fa fa-trash"></i></li></a>
+                              {% endif %}
                             </ul>
                           </div>
                         </div>
