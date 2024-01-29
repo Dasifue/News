@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 
 from accounts.models import User
 from .models import Category, Article, Comment
@@ -94,7 +95,7 @@ def article_update_view(request, pk: int):
         if form.is_valid():
             tags = find_tags(request.POST.get("tags")) # определяем: какие теги ввел пользователь
             form.update(article.id, *tags) # создание публикации
-            return redirect("news:index")
+            return redirect("news:details", pk=article.id)
 
     context = {
         "article": article,
@@ -102,3 +103,38 @@ def article_update_view(request, pk: int):
         "form": form,
     }
     return render(request=request, template_name="article_old.html", context=context)
+
+
+@login_required
+@is_owner(model=Comment)
+def comment_update_view(request, pk: int):
+    comment: Comment = get_object_or_404(Comment, pk=pk)
+
+    if request.method == "POST":
+        text = request.POST.get("comment")
+        comment.comment = text
+        comment.save()
+        return redirect("news:details", pk=comment.article.id)
+    
+    context = {
+        "comment": comment
+    }
+    
+    return render(request=request, template_name="comment_update.html", context=context)
+
+
+def search_view(request):
+    search = request.GET.get("search")    
+    if search is not None:
+        articles = Article.objects.filter(name__icontains=search)
+    else:
+        articles = Article.objects.all()
+
+    paginator = Paginator(articles, 1)
+    articles = paginator.get_page(request.GET.get("page"))
+
+    context = {
+        "articles": articles
+    }
+
+    return render(request=request, template_name="search.html", context=context)

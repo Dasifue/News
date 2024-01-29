@@ -77,6 +77,7 @@
                                     <li><a href="#"> Twitter</a></li><br>
                                     {% if article.owner == request.user %}
                                     <a href="{% url 'news:delete_article' pk=article.id %}"><li><i class="fa fa-trash"></i></li></a>
+                                    <a href="{% url 'news:article_update' pk=article.id %}"><li><i class="fa fa-pencil"></i></li></a>
                                     {% endif %}
                                   </ul>
                                 </div>
@@ -103,6 +104,7 @@
                               <button class="reply-btn">Ответить</button>
                               {% if comment.owner == request.user %}
                               <a href="{% url 'news:comment_delete' pk=comment.id %}"><li><i class="fa fa-trash"></i></li></a>
+                              <a href="{% url 'news:comment_update' pk=comment.id %}"><li><i class="fa fa-pencil"></i></li></a>
                               {% endif %}
                               <div class="reply-form" style="display: none;">
                                 <form id="comment" action="{% url 'news:comment_answer' article_pk=article.id parent_pk=comment.id %}" method="post">

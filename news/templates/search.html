@@ -1,0 +1,154 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="blog-posts grid-system">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8">
+          <div class="all-blog-posts">
+            <div class="row">
+
+             {% for article in articles %}
+
+
+              <div class="col-lg-6">
+                <div class="blog-post">
+                    <div class="blog-thumb">
+                      {% if article.image %}
+                      <img src="{{ article.image.url }}" alt="">
+                      {% endif %}
+                    </div>
+                    <div class="down-content">
+                      <span>{{ article.category.name }}</span>
+                      <a href="{% url 'news:details' pk=article.pk %}"><h4>{{ article.name }}</h4></a>
+                      <ul class="post-info">
+                        <li><a href="#">{{ article.owner.username }}</a></li>
+                        <li><a href="#">{{ article.updated }}</a></li>
+                        <li><a href="#">12 Comments</a></li>
+                      </ul>
+                      <div class="post-options">
+                        <div class="row">
+                          <div class="col-6">
+                            <ul class="post-tags">
+                              {% if request.user not in article.users.all %}
+                              <a href="{% url 'accounts:add_to_favorites' article_pk=article.id %}">
+                                <li><i class="fa fa-heart-o"></i></li>
+                                <li>{{ article.users.count }}</li>
+                              </a>
+                              {% else %}
+                              <a href="{% url 'accounts:remove_from_favorites' article_pk=article.id %}">
+                                <li><i class="fa fa-heart"></i></li>
+                                <li>{{ article.users.count }}</li>
+                              </a>
+                              {% endif %}
+                            </ul>
+                            <ul class="post-tags">
+                              <li><i class="fa fa-tags"></i></li>
+                              {% for tag in article.tags.all %}
+                              <li><a href="#">{{ tag.name }}</a></li>
+                              {% endfor %}
+                            </ul>
+                          </div>
+                          <div class="col-6">
+                            <ul class="post-share">
+                              <li><i class="fa fa-share-alt"></i></li>
+                              <li><a href="#">Facebook</a>,</li>
+                              <li><a href="#"> Twitter</a></li><br>
+                              {% if article.owner == request.user %}
+                              <a href="{% url 'news:delete_article' pk=article.id %}"><li><i class="fa fa-trash"></i></li></a>
+                              <a href="{% url 'news:article_update' pk=article.id %}"><li><i class="fa fa-pencil"></i></li></a>
+                              {% endif %}
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+              </div>
+
+              {% endfor %}
+              <div class="col-lg-12">
+                <div class="pagination">
+                    <span class="step-links">
+                        {% if articles.has_previous %}
+                            <a href="?{{ request.GET.urlencode }}&page=1">&laquo; first</a>
+                            <a href="?{{ request.GET.urlencode }}&page={{ articles.previous_page_number }}">previous</a>
+                        {% endif %}
+                
+                        <span class="current">
+                            Page {{ articles.number }} of {{ articles.paginator.num_pages }}.
+                        </span>
+                
+                        {% if articles.has_next %}
+                            <a href="?{{ request.GET.urlencode }}&page={{ articles.next_page_number }}">next</a>
+                            <a href="?{{ request.GET.urlencode }}&page={{ articles.paginator.num_pages }}">last &raquo;</a>
+                        {% endif %}
+                    </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="sidebar">
+            <div class="row">
+              <div class="col-lg-12">
+                <div class="sidebar-item search">
+                </div>
+              </div>
+              <div class="col-lg-12">
+                <div class="sidebar-item recent-posts">
+                  <div class="sidebar-heading">
+                    <h2>Search</h2>
+                  </div>
+                  <div class="content">
+                    <form action="{% url 'news:search' %}" method="get">
+                        <input type="text" name="search" id="" placeholder="Search...">
+                        <button type="submit">0</button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-12">
+                <div class="sidebar-item categories">
+                  <div class="sidebar-heading">
+                    <h2>Categories</h2>
+                  </div>
+                  <div class="content">
+                    <ul>
+                      <li><a href="#">- Nature Lifestyle</a></li>
+                      <li><a href="#">- Awesome Layouts</a></li>
+                      <li><a href="#">- Creative Ideas</a></li>
+                      <li><a href="#">- Responsive Templates</a></li>
+                      <li><a href="#">- HTML5 / CSS3 Templates</a></li>
+                      <li><a href="#">- Creative &amp; Unique</a></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-12">
+                <div class="sidebar-item tags">
+                  <div class="sidebar-heading">
+                    <h2>Tag Clouds</h2>
+                  </div>
+                  <div class="content">
+                    <ul>
+                      <li><a href="#">Lifestyle</a></li>
+                      <li><a href="#">Creative</a></li>
+                      <li><a href="#">HTML5</a></li>
+                      <li><a href="#">Inspiration</a></li>
+                      <li><a href="#">Motivation</a></li>
+                      <li><a href="#">PSD</a></li>
+                      <li><a href="#">Responsive</a></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}

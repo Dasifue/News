@@ -163,6 +163,7 @@
                               <li><a href="#"> Twitter</a></li><br>
                               {% if article.owner == request.user %}
                               <a href="{% url 'news:delete_article' pk=article.id %}"><li><i class="fa fa-trash"></i></li></a>
+                              <a href="{% url 'news:article_update' pk=article.id %}"><li><i class="fa fa-pencil"></i></li></a>
                               {% endif %}
                             </ul>
                           </div>
