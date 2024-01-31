@@ -38,8 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     'accounts',
     'news',
+    'api',
 ]
 
 MIDDLEWARE = [
@@ -86,8 +88,6 @@ DATABASES = {
         'PORT': '3306',
     }
 }
-
-print("HELLO, WORLD!")
 
 
 # Password validation
