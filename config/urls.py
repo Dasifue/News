@@ -26,8 +26,8 @@ urlpatterns = [
     path('api/', include("api.urls")),
     path('', include("news.urls")),
     path('accounts/', include("accounts.urls")),
-    path('auth/', include('djoser.urls.authtoken')),
-    path('auth/', include('djoser.urls.jwt')),
+    path('api/auth/', include('djoser.urls.authtoken')),
+    path('api/auth/', include('djoser.urls.jwt')),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

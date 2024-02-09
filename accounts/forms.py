@@ -17,7 +17,6 @@ class UserRegistrationForm(forms.ModelForm):
     
     def clean(self):
         cleaned_data = super().clean()
-        print(cleaned_data)
         password = cleaned_data["password"]
         password_confirm = cleaned_data["password_confirm"]
 
